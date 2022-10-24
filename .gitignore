@@ -34,3 +34,15 @@ lib*.so*
 *.swp
 
 .ccls
+
+# RPM packages
+*.rpm
+*.asc
+*.sha512
+
+# Dependencies downloaded
+*.tar.gz
+cmake*
+protobuf*
+zstd*
+snappy*

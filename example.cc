@@ -34,6 +34,7 @@ int main() {
     }
     std::cout << "Received " << msg.getDataAsString() << " from "
               << msg.getMessageId() << std::endl;
+    consumer.acknowledge(msg);
   }
 
   client.close();
