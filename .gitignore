@@ -46,3 +46,4 @@ cmake*
 protobuf*
 zstd*
 snappy*
+openssl*

@@ -8,42 +8,42 @@ if [[ $(id -u) -ne 0  ]]; then
 fi
 
 yum update -y
-yum install -y curl gcc gcc-c++ make
-
-CURL=$(which curl)
+yum install -y curl gcc gcc-c++ make which
 
 download() {
-    $CURL -O -L $1
+    curl -O -L $1
 }
 
-PATH="https://dist.apache.org/repos/dist/dev/pulsar/pulsar-client-cpp-3.0.0-candidate-3/rpm-x86_64/x86_64"
-download $PATH/apache-pulsar-client-3.0.0-1.x86_64.rpm
-download $PATH/apache-pulsar-client-3.0.0-1.x86_64.rpm.asc
-download $PATH/apache-pulsar-client-3.0.0-1.x86_64.rpm.sha512
-download $PATH/apache-pulsar-client-3.0.0-1.x86_64.rpm
-download $PATH/apache-pulsar-client-3.0.0-1.x86_64.rpm.asc
-download $PATH/apache-pulsar-client-3.0.0-1.x86_64.rpm.sha512
-download $PATH/apache-pulsar-client-debuginfo-3.0.0-1.x86_64.rpm
-download $PATH/apache-pulsar-client-debuginfo-3.0.0-1.x86_64.rpm.asc
-download $PATH/apache-pulsar-client-debuginfo-3.0.0-1.x86_64.rpm.sha512
-download $PATH/apache-pulsar-client-devel-3.0.0-1.x86_64.rpm
-download $PATH/apache-pulsar-client-devel-3.0.0-1.x86_64.rpm.asc
-download $PATH/apache-pulsar-client-devel-3.0.0-1.x86_64.rpm.sha512
+URL_PATH="https://dist.apache.org/repos/dist/dev/pulsar/pulsar-client-cpp-3.0.0-candidate-3/rpm-x86_64/x86_64"
+download $URL_PATH/apache-pulsar-client-3.0.0-1.x86_64.rpm
+download $URL_PATH/apache-pulsar-client-3.0.0-1.x86_64.rpm.asc
+download $URL_PATH/apache-pulsar-client-3.0.0-1.x86_64.rpm.sha512
+download $URL_PATH/apache-pulsar-client-3.0.0-1.x86_64.rpm
+download $URL_PATH/apache-pulsar-client-3.0.0-1.x86_64.rpm.asc
+download $URL_PATH/apache-pulsar-client-3.0.0-1.x86_64.rpm.sha512
+download $URL_PATH/apache-pulsar-client-debuginfo-3.0.0-1.x86_64.rpm
+download $URL_PATH/apache-pulsar-client-debuginfo-3.0.0-1.x86_64.rpm.asc
+download $URL_PATH/apache-pulsar-client-debuginfo-3.0.0-1.x86_64.rpm.sha512
+download $URL_PATH/apache-pulsar-client-devel-3.0.0-1.x86_64.rpm
+download $URL_PATH/apache-pulsar-client-devel-3.0.0-1.x86_64.rpm.asc
+download $URL_PATH/apache-pulsar-client-devel-3.0.0-1.x86_64.rpm.sha512
+set +e
+rpm -ivh apache-pulsar-client-*.rpm
+set -e
 
 CXX_FLAGS="-DINSIDE_DOCKER -std=c++11"
+set -x
 
 # Link to libpulsar.so
 g++ example.cc $CXX_FLAGS -Wl,-rpath=/usr/lib -lpulsar
 ./a.out
 
 # Link to libpulsarwithdeps.a
-g++ example.cc $CXX_FLAGS
 g++ example.cc $CXX_FLAGS /usr/lib/libpulsarwithdeps.a -lpthread -ldl
 ./a.out
 
 # TODO: the default boost-devel seems not work 
 echo "There is something wrong with libpulsar.a build"
-exit 0
 # Install dependencies to link to libpulsar.a
 # zstd, snappy and protobuf must be built from source on CentOS 7
 yum install -y curl-devel openssl-devel zlib-devel boost-devel
@@ -65,6 +65,19 @@ tar zxf protobuf-cpp-3.20.3.tar.gz
 cd protobuf-3.20.3/
 ./configure && make -j4 && make install
 cd -
+download https://github.com/openssl/openssl/archive/refs/tags/OpenSSL_1_1_1q.tar.gz
+tar zxf OpenSSL_1_1_1q.tar.gz
+cd openssl-OpenSSL_1_1_1q/
+./Configure -fPIC linux-x86_64
+make -j4 && make install
+cd -
 
 # Link to libpulsar.a
-g++ example.cc $CXX_FLAGS /usr/lib/libpulsar.a -lpthread -ldl -lprotobuf -lz -lzstd -lsnappy -lboost_regex -lboost_system -lssl -lcrypto -lcurl
+g++ example.cc $CXX_FLAGS /usr/lib/libpulsar.a \
+    -I /usr/local/include \
+    -lboost_regex -lboost_system \
+    -L /usr/local/lib \
+    -lz -lzstd -lsnappy -lprotobuf -lcurl \
+    -L /usr/local/lib64 -Wl,-rpath=/usr/local/lib64:/usr/local/lib \
+    -lssl -lcrypto \
+    -lpthread -ldl
