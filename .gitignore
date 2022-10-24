@@ -1,0 +1,36 @@
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+*.os
+*.scons*
+
+# Compiled Dynamic libraries
+*.so
+lib*.so*
+*.dylib
+*.dll
+*.so.1
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# Dependency file
+*.d
+
+# Mac swap file
+*.DS_Store
+
+# Linux swap file
+*.swp
+
+.ccls
