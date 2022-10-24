@@ -34,3 +34,16 @@ g++ example.cc -DINSIDE_DOCKER -std=c++11 -I $PULSAR_CLIENT_CPP/include -L $PULS
 ```
 
 It would be much easier if the Pulsar C++ Client library was installed to the system path. In this case, you don't need to add the `-I` or `-L` option. The `-Wl,-rpath` option is still needed except the `libpulsar.so` exists on the `PATH` environment variables.
+
+## Verify the RPM packages
+
+Run a `centos:7` container:
+
+```bash
+docker run -v $PWD:/app -itd centos:7
+```
+
+Then login the container, and run `./rpm_x86_64_verify.sh`, which downloads the RPM packages and build applications with the given libraries:
+- libpulsar.so
+- libpulsar.a
+- libpulsarwithdeps.a
