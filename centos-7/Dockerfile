@@ -1,10 +1,10 @@
 FROM centos:7
 
+RUN yum update -y && yum install -y curl gcc gcc-c++
+
 ARG RELEASE_URL
 ARG ARCH
 ARG VERSION
-
-RUN yum update -y && yum install -y curl gcc gcc-c++ make which
 
 WORKDIR /app
 RUN curl -O -L ${RELEASE_URL}/rpm-${ARCH}/${ARCH}/apache-pulsar-client-${VERSION}-1.${ARCH}.rpm
