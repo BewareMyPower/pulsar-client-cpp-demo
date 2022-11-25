@@ -4,7 +4,7 @@ The examples of [Pulsar C++ Client](https://github.com/apache/pulsar-client-cpp)
 
 ## Windows (MSVC)
 
-See [README.md](./pulsar-windows/README.md).
+See [README.md](./windows/README.md).
 
 ## Linux
 
