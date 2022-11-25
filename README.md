@@ -43,3 +43,20 @@ docker build . -f ./ubuntu-20.04/Dockerfile \
 docker run -it --rm pulsar-cpp-ubuntu-20.04 /app/dynamic.out pulsar://172.17.0.1:6650
 docker run -it --rm pulsar-cpp-ubuntu-20.04 /app/static.out pulsar://172.17.0.1:6650
 ```
+
+### APK
+
+Verify the official APK packages inside a Alpine 3.17 docker container.
+
+```bash
+# Here we add --network=host to reuse the proxy on host.
+# See https://github.com/gliderlabs/docker-alpine/issues/445
+docker build . -f ./alpine-3.17/Dockerfile \
+  --network=host \
+  --build-arg RELEASE_URL=https://dist.apache.org/repos/dist/dev/pulsar/pulsar-client-cpp/pulsar-client-cpp-3.1.0-candidate-1/ \
+  --build-arg ARCH=x86_64 \
+  --build-arg VERSION=3.1.0 \
+  -t pulsar-cpp-alpine-3.17
+docker run -it --rm pulsar-cpp-alpine-3.17 /app/dynamic.out pulsar://172.17.0.1:6650
+docker run -it --rm pulsar-cpp-alpine-3.17 /app/static.out pulsar://172.17.0.1:6650
+```
