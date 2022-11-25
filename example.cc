@@ -1,10 +1,12 @@
 #include <pulsar/Client.h>
-
-#include "config.h"
 using namespace pulsar;
 
-int main() {
-  Client client(SERVICE_URL);
+int main(int argc, char* argv[]) {
+  if (argc < 2) {
+    std::cerr << "Usage: " << argv[0] << " service-url" << std::endl;
+    return 1;
+  }
+  Client client(argv[1]);
   const std::string topic = "basic_e2e_example";
   Producer producer;
   {
