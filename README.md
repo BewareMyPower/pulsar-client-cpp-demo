@@ -47,3 +47,7 @@ Then login the container, and run `./rpm_x86_64_verify.sh`, which downloads the 
 - libpulsar.so
 - libpulsar.a
 - libpulsarwithdeps.a
+
+## Windows (MSVC)
+
+See [README.md](./pulsar-windows/README.md).
