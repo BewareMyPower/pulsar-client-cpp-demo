@@ -2,6 +2,23 @@
 
 The examples of [Pulsar C++ Client](https://github.com/apache/pulsar-client-cpp).
 
+It's also helpful for verifying the official releases of the C++ client.
+
+## Verify the signature
+
+You must first import the KEY file first. For example:
+
+```bash
+curl -O -L https://dist.apache.org/repos/dist/dev/pulsar/KEYS
+gpg --import KEYS
+```
+
+Then, for any file, you can use [verify.sh](./verify.sh) to verify the release. For example:
+
+```bash
+./verify.sh https://dist.apache.org/repos/dist/dev/pulsar/pulsar-client-cpp/pulsar-client-cpp-3.1.0-candidate-3/apache-pulsar-client-cpp-3.1.0.tar.gz
+```
+
 ## Windows (MSVC)
 
 See [README.md](./windows/README.md).
