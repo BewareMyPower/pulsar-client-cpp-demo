@@ -20,5 +20,13 @@ curl -O -L $URL.asc
 curl -O -L $URL.sha512
 gpg --verify $BASENAME.asc
 echo "[OK] GPG verified"
-shasum -a 512 -c $BASENAME.sha512
-echo "[OK] SHA512 verified"
+
+# Do not use -c xxx.sha512 to avoid the path is different
+SHASUM=$(shasum -a 512 $BASENAME | awk '{print $1}')
+EXPECTED_SHASUM=$(cat $BASENAME.sha512 | awk '{print $1}')
+if [[ $SHASUM ==  $EXPECTED_SHASUM ]]; then
+    echo "[OK] SHA512 verified"
+else
+    echo "[FAILED] SHA512 checksum: $SHASUM"
+    echo "                expected: $EXPECTED_SHASUM"
+fi

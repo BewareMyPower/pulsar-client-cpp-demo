@@ -19,6 +19,13 @@ Then, for any file, you can use [verify.sh](./verify.sh) to verify the release. 
 ./verify.sh https://dist.apache.org/repos/dist/dev/pulsar/pulsar-client-cpp/pulsar-client-cpp-3.1.0-candidate-3/apache-pulsar-client-cpp-3.1.0.tar.gz
 ```
 
+You will see the following outputs if there is nothing wrong:
+
+```
+[OK] GPG verified
+[OK] SHA512 verified
+```
+
 ## Windows (MSVC)
 
 See [README.md](./windows/README.md).
