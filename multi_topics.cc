@@ -31,7 +31,10 @@ int main(int argc, char* argv[]) {
   const long kSleepSeconds = (argc > 1) ? std::stol(argv[1]) : 3;
   const int kNumProducers = (argc > 2) ? std::stoi(argv[2]) : 10;
 
-  Client client{"pulsar://127.0.0.1:6650"};
+  ClientConfiguration client_conf;
+  client_conf.setOperationTimeoutSeconds(300);
+  client_conf.setLogger(new FileLoggerFactory(Logger::LEVEL_INFO, "output-multi-topics.log"));
+  Client client{"pulsar://127.0.0.1:6650", client_conf};
   ClientGuard client_guard{client};
   std::vector<Producer> producers{static_cast<size_t>(kNumProducers)};
   auto topic_base = "my-topic-" + std::to_string(time(nullptr)) + "-";
