@@ -47,3 +47,11 @@ protobuf*
 zstd*
 snappy*
 openssl*
+
+# CMake files
+.cmake
+Makefile
+cmake_install.cmake
+CMakeFiles
+CMakeCache.txt
+!CMakeLists.txt
