@@ -36,6 +36,12 @@ else ()
 endif ()
 include_directories(${PULSAR_INCLUDE_DIR})
 
+find_package(Threads REQUIRED)
+
 add_executable(example ./example.cc)
 set_target_properties(example PROPERTIES OUTPUT_NAME "example.out")
 target_link_libraries(example PRIVATE ${PULSAR_LIBRARIES})
+
+add_executable(multi_topics ./multi_topics.cc)
+set_target_properties(multi_topics PROPERTIES OUTPUT_NAME "multi_topics.out")
+target_link_libraries(multi_topics PRIVATE ${PULSAR_LIBRARIES} Threads::Threads)
