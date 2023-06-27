@@ -7,16 +7,9 @@
 #include <random>
 #include <thread>
 
+#include "close_guard.h"
 #include "log_utils.h"
 using namespace pulsar;
-
-struct ClientGuard {
-  ClientGuard(Client& client) : client_(client) {}
-  ~ClientGuard() { client_.close(); }
-
- private:
-  Client& client_;
-};
 
 int main(int argc, char* argv[]) {
   if (argc > 1 && std::string(argv[1]) == "-h") {
@@ -33,9 +26,10 @@ int main(int argc, char* argv[]) {
 
   ClientConfiguration client_conf;
   client_conf.setOperationTimeoutSeconds(300);
-  client_conf.setLogger(new FileLoggerFactory(Logger::LEVEL_INFO, "output-multi-topics.log"));
+  client_conf.setLogger(
+      new FileLoggerFactory(Logger::LEVEL_INFO, "output-multi-topics.log"));
   Client client{"pulsar://127.0.0.1:6650", client_conf};
-  ClientGuard client_guard{client};
+  CloseGuard<Client> client_guard{client};
   std::vector<Producer> producers{static_cast<size_t>(kNumProducers)};
   auto topic_base = "my-topic-" + std::to_string(time(nullptr)) + "-";
   LOG_INFO("Use topic base: " << topic_base);
