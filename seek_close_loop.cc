@@ -19,26 +19,16 @@ int main(int argc, char* argv[]) {
 
   producer.send(MessageBuilder().setContent("hello").build());
 
-  ConsumerConfiguration conf;
-  conf.setSubscriptionInitialPosition(InitialPositionEarliest);
-
-  Message msg;
   for (int i = 0; i < 100; i++) {
     Consumer consumer;
-    if (auto result = client.subscribe(topic, "sub", conf, consumer);
+    if (auto result = client.subscribe(topic, "sub", consumer);
         result != ResultOk) {
       LOG_ERROR(i << " Failed to subscribe: " << result);
       return 2;
     }
-    if (auto result = consumer.receive(msg, 3000); result != ResultOk) {
-      LOG_ERROR("Failed to receive: " << result);
-      return 3;
-    }
-    LOG_INFO(i << " Received from " << msg.getMessageId());
     consumer.seekAsync(MessageId::earliest(), [](auto result) {
       LOG_INFO("Seek to earliest: " << result);
     });
-    LOG_INFO(i << " Received from " << msg.getMessageId() << " after seek");
     if (auto result = consumer.close(); result != ResultOk) {
       LOG_ERROR("Failed to close: " << result);
     }
