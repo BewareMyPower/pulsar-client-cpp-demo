@@ -49,3 +49,7 @@ target_link_libraries(multi_topics PRIVATE ${PULSAR_LIBRARIES} Threads::Threads)
 add_executable(seek_close_loop ./seek_close_loop.cc)
 set_target_properties(seek_close_loop PROPERTIES OUTPUT_NAME "seek_close_loop.out")
 target_link_libraries(seek_close_loop PRIVATE ${PULSAR_LIBRARIES} Threads::Threads)
+
+add_executable(send_example ./send_example.cc)
+set_target_properties(send_example PROPERTIES OUTPUT_NAME "send_example.out")
+target_link_libraries(send_example PRIVATE ${PULSAR_LIBRARIES})
