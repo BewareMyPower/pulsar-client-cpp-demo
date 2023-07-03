@@ -1,6 +1,4 @@
 #include <pulsar/Client.h>
-
-#include "log_utils.h"
 using namespace pulsar;
 
 int main(int argc, char* argv[]) {
@@ -10,7 +8,6 @@ int main(int argc, char* argv[]) {
   Result result =
       client.createProducer("persistent://public/default/my-topic", producer);
   if (result != ResultOk) {
-    LOG_ERROR("Error creating producer: " << result);
     return -1;
   }
 
@@ -19,12 +16,12 @@ int main(int argc, char* argv[]) {
     Message msg = MessageBuilder().setContent("content").build();
     Result res = producer.send(msg);
     if (res != ResultOk) {
-      LOG_ERROR("Failed to send " << i << res);
+      std::cerr << "Failed to send " << i << res << std::endl;
       break;
     }
     // NOTE: It might stuck, if we logged for each message, it would work well.
     if (i % 100 == 99) {
-      LOG_INFO("XYZ " << i << " done");
+      std::cout << std::time(nullptr) << " " << i << std::endl;
     }
   }
 
